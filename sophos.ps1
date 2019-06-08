@@ -15,7 +15,7 @@ foreach($string in $ssh.output)
             $result = 1
         }
         else {
-            $result = $string.replace("'REF_IpsS", '')
+            $result = $string.replace("'REF_IpsS", '') | $_.replace("", '')
         }
         if($counter % 2) {
         $vpn_status = $result
