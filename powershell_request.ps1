@@ -54,7 +54,7 @@ function New-AemApiRequest
 
 	# Make request
 	try {Invoke-RestMethod @params}
-	catch{$_.Exception}
+	catch{write-host $_.Exception}
 }
 
 function Get-Site {
@@ -95,35 +95,43 @@ function Get-Devices {
 	)
 	$params = @{
 		apiUrl         	=	'https://merlot-api.centrastage.net'
-		apiKey         	=	'DVVCHUVEGJU67CP2D8DOA0H2TVA672TA'
-		apiSecretKey   	=	'LSGLEH7PNNUHQBT09U3JQ05HGD8I3L7O'
 		apiMethod      	=	'GET'
 		apiRequest		=	'/v2/account/devices'
 		apiRequestBody	=	''
 	}
-
+	
 	$site = $Kunde
 	if ($site -ne $null) {$params['apiRequest'] = "/v2/site/" + $site.uid + "/devices"}
 	
 	$result = New-AemApiRequest @params -ApiAccessToken $apiAccessToken
-	$AllResult += $result
+
+	$AllResult += $result.devices
 	while ($null-ne $result.pageDetails.nextPageURL) {
-		$params['apiRequest'] = ""
-		$params['apiUrl'] = $result.pageDetails.nextPageURL
+		$params['apiRequest'] = ($result.pageDetails.nextPageURL).Replace("https://merlot-api.centrastage.net/api","")
 		$result = New-AemApiRequest @params -ApiAccessToken $apiAccessToken	
-		$AllResult += $result	
+		$AllResult += $result.devices
 	}
 
 	if ($devicetype) {
 		$result.devices | Where-Object {$_.Devicetype.category -eq $Devicetype}
 	}
 	else {
-		$result#.devices 
+		$AllResult 
 	}
 	
+
+
+
 }
 
-
+$params = @{
+	apiUrl         	=	'https://merlot-api.centrastage.net'
+	apiKey         	=	'DVVCHUVEGJU67CP2D8DOA0H2TVA672TA'
+	apiSecretKey   	=	'LSGLEH7PNNUHQBT09U3JQ05HGD8I3L7O'
+	apiMethod      	=	'GET'
+	apiRequest		=	'/v2/account/devices'
+	apiRequestBody	=	''
+}
 
 # Call New-AemApiAccessToken function using defined parameters 
 $apiAccessToken = New-AemApiAccessToken @params
@@ -135,4 +143,4 @@ $apiAccessToken = New-AemApiAccessToken @params
 #Get-Devices -Kunde 'IT-S GmbH'
 
 
-Get-Site
+(Get-Devices).count #| select hostname
