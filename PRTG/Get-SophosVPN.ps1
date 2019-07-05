@@ -54,6 +54,6 @@ foreach($string in $ssh.output)
 
 $prtg += "
 </prtg>"
-#Remove-Item "C:\Program Files (x86)\PRTG Network Monitor\Custom Sensors\EXEXML\data.txt"
 
-$prtg# >> "C:\Program Files (x86)\PRTG Network Monitor\Custom Sensors\EXEXML\data.txt"
+
+$prtg
