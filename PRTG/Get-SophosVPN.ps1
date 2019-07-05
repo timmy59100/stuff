@@ -3,8 +3,7 @@ $username = "root"
 $ComputerName = $env:prtg_host 
 $keyfile = "C:\PRTG\$Computername"
 $command = "/usr/local/bin/confd-client.plx get_ipsec_status|grep 'REF_\|all_established'"
-$ssh = ''
-$session = 0
+
 
 
 $credential = New-Object System.Management.Automation.PSCredential($username,$keyfilePassword)
