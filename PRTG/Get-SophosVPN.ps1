@@ -1,12 +1,14 @@
-
-$password = "asdf" | ConvertTo-SecureString -asPlainText -Force
+$keyfilePassword = $env:prtg_linuxpassword  | ConvertTo-SecureString -asPlainText -Force
 $username = "root"
-$keyfile = "C:\Users\Administrator\Desktop\sophosprivate.key"
+$ComputerName = $env:prtg_host 
+$keyfile = "C:\PRTG\$Computername"
 $command = "/usr/local/bin/confd-client.plx get_ipsec_status|grep 'REF_\|all_established'"
+$ssh = ''
+$session = 0
 
 
-$credential = New-Object System.Management.Automation.PSCredential($username,$password)
-$session = New-SSHSession -ComputerName 192.168.246.1 -KeyFile $keyfile -Credential $credential
+$credential = New-Object System.Management.Automation.PSCredential($username,$keyfilePassword)
+$session = New-SSHSession -ComputerName $ComputerName -KeyFile $keyfile -Credential $credential -Force -WarningAction SilentlyContinue
 $ssh = Invoke-SSHCommand -Index 0 -Command $command
 
 
@@ -54,6 +56,6 @@ foreach($string in $ssh.output)
 
 $prtg += "
 </prtg>"
-Remove-Item "C:\Program Files (x86)\PRTG Network Monitor\Custom Sensors\EXEXML\data.txt"
+#Remove-Item "C:\Program Files (x86)\PRTG Network Monitor\Custom Sensors\EXEXML\data.txt"
 
-$prtg >> "C:\Program Files (x86)\PRTG Network Monitor\Custom Sensors\EXEXML\data.txt"
+$prtg# >> "C:\Program Files (x86)\PRTG Network Monitor\Custom Sensors\EXEXML\data.txt"
