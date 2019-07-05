@@ -17,7 +17,6 @@ function add-Channel {
         $channelname,
         $channelvalue
     )
-    if($channelvalue -eq 0){$warning = 1}else{$warning = 0}
 
     $channel = "
     <result>
