@@ -1,4 +1,4 @@
-#===========================
+﻿#===========================
 # ___ ___ _____ ___
 #| _ \ _ \_  _/ __|
 #|  _/   / | ||(_ |
@@ -97,7 +97,7 @@ $IgnoreHardcoded = @('Google Update Service (gupdate)', 'Google Update', 'Dell D
                        'Volumeschattenkopie', 'Sophos Web Intelligence Update', 'Windows Installer', 'IGEL RMGUIServer', 'Sicherheitscenter', 'DCOM-Server-Prozessstart', 
                        'TPM-Basisdienste', 'Derby Database', 'Apache Tomcat 7', 'Kacheldaten-Modellserver', 'Microsoft Exchange EdgeSync', 'Windows-Bilderfassung (WIA)', 
                        'SQL Server-Agent*', 'WyBackupSvc', 'SQL Server Hilfsdienst*' ,' SQL Active Directory Helper Service', 'MDM Integration Service', 'wdPostMan',
-                        'Z-Cron', 'Downloaded Maps Manager', 'RIB NetCounterLM', 'Intelligenter Hintergrundï¿½bertragungsdienst', 'Smartcard', 'Windows Agent Service', 'Multimediaklassenplaner')
+                        'Z-Cron', 'Downloaded Maps Manager', 'RIB NetCounterLM', 'Intelligenter Hintergrundübertragungsdienst', 'Smartcard', 'Windows Agent Service', 'Multimediaklassenplaner')
 
 # NB: the weird "| ? {$_}" is to remove empty array elements
 $Ignore = ((@($IgnoreList -Split ",") + $IgnoreHardcoded) | ? {$_}  | foreach { [Regex]::Escape($_.trim()) -replace "\*", ".*" } ) -join "|"
