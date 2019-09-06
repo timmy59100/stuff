@@ -50,7 +50,11 @@ foreach($string in $ssh.output)
         }
         if($counter % 2) {
             $vpn_status = $result
-            if($vpn_name -notmatch $Ignore)
+            if($Ignore -like "")
+            {
+                $prtg += add-Channel -channelname $vpn_name -channelvalue $vpn_status
+            }
+            elseif($vpn_name -notmatch $Ignore)
             {
             $prtg += add-Channel -channelname $vpn_name -channelvalue $vpn_status
             }
