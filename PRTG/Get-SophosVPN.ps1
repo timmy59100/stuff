@@ -1,3 +1,7 @@
+param(
+    [string]$IgnoreList = ""
+)
+
 $keyfilePassword = $env:prtg_linuxpassword  | ConvertTo-SecureString -asPlainText -Force
 $username = "root"
 $ComputerName = $env:prtg_host 
@@ -10,12 +14,14 @@ $credential = New-Object System.Management.Automation.PSCredential($username,$ke
 $session = New-SSHSession -ComputerName $ComputerName -KeyFile $keyfile -Credential $credential -Force -WarningAction SilentlyContinue
 $ssh = Invoke-SSHCommand -Index 0 -Command $command
 
+$Ignore = (@($IgnoreList -Split ",") | ? {$_}  | foreach { [Regex]::Escape($_.trim()) -replace "\*", ".*" } ) -join "|"
 
 function add-Channel {
     param (
         $channelname,
         $channelvalue
     )
+    if($channelvalue -eq 0){$warning = 1}else{$warning = 0}
 
     $channel = "
     <result>
@@ -43,8 +49,11 @@ foreach($string in $ssh.output)
             $result = $result.replace("' => {", '')
         }
         if($counter % 2) {
-        $vpn_status = $result
-        $prtg += add-Channel -channelname $vpn_name -channelvalue $vpn_status
+            $vpn_status = $result
+            if($vpn_name -notmatch $Ignore)
+            {
+            $prtg += add-Channel -channelname $vpn_name -channelvalue $vpn_status
+            }
         }
         else{
         $vpn_name = $result
