@@ -128,7 +128,10 @@ $UptimeSeconds = ([int](New-TimeSpan $wmi_os.ConvertToDateTime($wmi_os.Lastbootu
 $Services = $FilteredServices | Where {$_.StartMode -eq 'Auto' -and $_.State -ne 'Running'}  
 $NotRunningServices = ($FilteredServices | Where {$_.StartMode -eq 'Auto' -and $_.State -ne 'Running'})
 
+#Test
 $importpath = "C:\PRTG\Sensordata\$computername.xml"
+if(!(Test-Path "C:\PRTG\Sensordata\"))
+{New-Item -ItemType Directory -Force -Path "C:\PRTG\Sensordata\"}
 try {
     winrm set winrm/config/client ‘@{TrustedHosts="*"}’
 }
