@@ -1,3 +1,4 @@
+write-host "test"
 function Add-3cxCloudDevice {
     param (
         $company, $Name, $IPAddress, $WindowsUserName, $WindowsPassword
@@ -61,7 +62,7 @@ function Add-Device-csv {
     foreach($device in $csv)
     {
     $Name = $device.Name
-    $IPAddress = $device."IP Address"
+    $IPAddress = $device."IPAddress"
     $Name = $Name + " (" + $IPAddress + ")"
 
     $Probe = Get-Probe *$company*
@@ -79,7 +80,10 @@ $location = $Probe
     if($null -ne $group)
     {
         $group1 = Get-Group *$group
-        $group1 = $Probe | Get-Group *$group
+        if ($null -ne $probe) {
+            $group1 = $Probe | Get-Group *$group
+        }
+        
        if($null -eq $group1)
        {
             $location = $Probe | Add-Group $group
@@ -201,14 +205,15 @@ function Set-MSA-Timeout {
 #Get-Sensor -Tags sshsan | where {$_.Message -eq "Timeout while trying to aquire Mutex, try to use bigger Scanningintervals"} | Acknowledge-Sensor -Forever
 
 #Get-Sensor -Status Paused | where {$_.probe -notlike "Stein*" -and $_.probe -notlike "RNO*" }
-#(Get-Sensor -Status Paused | where {$_.probe -notlike "Stein*" -and $_.probe -notlike "RNO*" } | select name, probe,Device, lastup | sort lastup).countff
+#(Get-Sensor -Status Paused | where {$_.probe -notlike "Stein*" -and $_.probe -notlike "RNO*" } | select name, probe,Device, lastup | sort lastup).count
 #$devices = get-site zuhause* | Get-Devices -Devicetype 'Server'
 
 #Get-Device -id 27760 | Get-Sensor | where {$_.name -like "Disk*"} | Remove-Object -Force
 
 #Get-Sensor -Tags systemhealthsensor | Remove-Object -Force
 #Get-Sensor -Tags commonsaas | Remove-Object -Force
-$sensor = get-sensor -id 36722
+
+<#$sensor = get-sensor -id 36722
 $channel = $sensor | Get-Channel -Name "Gesamt" 
 $channel | Set-ChannelProperty UpperErrorLimit 95
 $channel | Set-ChannelProperty UpperWarningLimit 90
@@ -228,4 +233,8 @@ foreach ($sensor in $sensors)
     $channel | Set-ChannelProperty LowerErrorLimit 5
     $channel | Set-ChannelProperty LowerWarningLimit 10
     $channel | Set-ChannelProperty  LimitsEnabled "true"
+    Write-Host $sensor.Name
 }
+#>
+
+#Add-Device-csv -company "Büchler" -csv $csv -group "B*chler*"
