@@ -1,4 +1,3 @@
-write-host "test"
 function Add-3cxCloudDevice {
     param (
         $company, $Name, $IPAddress, $WindowsUserName, $WindowsPassword
