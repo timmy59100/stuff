@@ -122,8 +122,8 @@ function Get-Devices {
 
 $params = @{
     apiUrl         =	'https://merlot-api.centrastage.net'
-    apiKey         =	'DVVCHUVEGJU67CP2D8DOA0H2TVA672TA'
-    apiSecretKey   =	'LSGLEH7PNNUHQBT09U3JQ05HGD8I3L7O'
+    apiKey         =	'INQ4JVM3IUSCQAISONT1015MTCQ7E9FS'
+    apiSecretKey   =	'US8LKKUC3QASTSHEMNP1V6P42QF6E096'
     apiMethod      =	'GET'
     apiRequest     =	'/v2/account/devices'
     apiRequestBody	=	''
