@@ -139,4 +139,11 @@ $apiAccessToken = New-AemApiAccessToken @params
 #Get-Devices -Kunde 'IT-S GmbH'
 
 
-(Get-Devices).count #| select hostname
+#(Get-Devices).count #| select hostname
+
+$devices = (Get-Devices | where {$_.siteName -eq "Filtrox AG" -and $_.Devicetype.category -eq "Server"}).hostname 
+
+foreach($device in $devices)
+{
+    New-Item -Path C:\Filtrox\$device -ItemType Directory
+}

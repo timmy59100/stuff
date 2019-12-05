@@ -199,7 +199,6 @@ function Set-MSA-Timeout {
 }
 
 
-
 #Add-Device-csv -company Hardegger -csv 'H:\Hardegger Käse\switch.csv' -vorlage ping -group "Netzwerk-Infrastruktur"
 
 #Get-Sensor -Tags sshsan | where {$_.Message -eq "Timeout while trying to aquire Mutex, try to use bigger Scanningintervals"} | Acknowledge-Sensor -Forever
@@ -251,3 +250,23 @@ foreach ($sensor in $sensors)
 }
 
 #>
+
+
+
+
+function Set-DiskLimits {
+    param (
+     $SensorType
+    )
+
+$sensors = Get-Sensor -Type "hypervcsvdiskfree"
+foreach ($sensor in $sensors)
+{
+    $channel = $sensor | Get-Channel -Name "Freier Platz" 
+    $channel | Set-ChannelProperty  LimitsEnabled "true"
+    $channel | Set-ChannelProperty LowerErrorLimit 10
+    $channel | Set-ChannelProperty LowerWarningLimit 15
+    Write-Host $sensor.Name
+}
+    
+}
