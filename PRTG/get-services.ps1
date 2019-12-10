@@ -125,6 +125,8 @@ $ServicesFilteredOut = $All_Services | Where {$_.DisplayName -match $Ignore}
 
 $UptimeSeconds = ([int](New-TimeSpan $wmi_os.ConvertToDateTime($wmi_os.Lastbootuptime) $(get-date)).TotalSeconds)
 
+$services_restarted = @()
+
 $Services = $FilteredServices | Where {$_.StartMode -eq 'Auto' -and $_.State -ne 'Running'}  
 $NotRunningServices = ($FilteredServices | Where {$_.StartMode -eq 'Auto' -and $_.State -ne 'Running'})
 
