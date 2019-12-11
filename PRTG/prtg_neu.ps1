@@ -1,3 +1,4 @@
+GoPrtg
 function Add-3cxCloudDevice {
     param (
         $company, $Name, $IPAddress, $WindowsUserName, $WindowsPassword
@@ -16,7 +17,7 @@ function Add-3cxCloudDevice {
 
 function Add-Device-alu {
     param (
-        $company, $Name, $IPAddress, $vorlage
+        $company, $Name, $IPAddress, $vorlage, $group
     )
 
     $Name = $Name + " (" + $IPAddress + ")"
@@ -33,8 +34,26 @@ function Add-Device-alu {
 
     $Probe = Get-Probe *$company*
 
+    $location = $Probe
+
+    if($null -ne $group)
+    {
+        $group1 = Get-Group *$group
+        if ($null -ne $probe) {
+            $group1 = $Probe | Get-Group *$group
+        }
+        
+       if($null -eq $group1)
+       {
+            $location = $Probe | Add-Group $group
+       }
+       else {
+           $location = $group1
+       }
+    }
+
     
-    $NewDevice = $Probe | Add-Device $Name
+    $NewDevice = $location | Add-Device $Name
 
     $NewDevice | Set-ObjectProperty -Hostv4 $IPAddress
 

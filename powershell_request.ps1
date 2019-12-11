@@ -1,4 +1,5 @@
 #requires -Version 3.0
+
 function New-AemApiAccessToken {
     param
     (
@@ -95,8 +96,8 @@ function Get-Devices {
         apiRequest     =	'/v2/account/devices'
         apiRequestBody	=	''
     }
-	
-    $site = $Kunde
+    $site = $null
+    if ($Kunde -ne $null){$site = Get-site -Kunde $Kunde}
     if ($site -ne $null) { $params['apiRequest'] = "/v2/site/" + $site.uid + "/devices" }
 	
     $result = New-AemApiRequest @params -ApiAccessToken $apiAccessToken
@@ -118,6 +119,26 @@ function Get-Devices {
 
 
 
+}
+
+function Get-CentrastageDevice {
+    param (
+        $id
+    )
+
+    $params = @{
+        apiUrl         =	'https://merlot-api.centrastage.net'
+        apiMethod      =	'GET'
+        apiRequest     =	'/v2/device/id'
+        apiRequestBody	=	''
+    }
+
+    if ($id -ne $null) { $params['apiRequest'] = "/v2/device/id/" + $id }
+
+
+     $result = New-AemApiRequest @params -ApiAccessToken $apiAccessToken
+
+     $result
 }
 
 $params = @{
@@ -148,4 +169,21 @@ foreach($device in $devices)
 {
     New-Item -Path C:\Filtrox\$device -ItemType Directory
 }
+#>
+
+ get-devices -Kunde "Filtrox AG"
+
+#Get-CentrastageDevice -id 1020640
+
+
+#PRTG
+<#
+. .\PRTG\prtg_neu.ps1
+$device = $null
+$device = Get-Devices | where {$_.hostname -eq "SRV38"}
+
+if ($null -ne $device) {
+    Add-Device-alu -company "IT-S" -Name $device.hostname -IPAddress $device.intIpAddress
+}
+
 #>
